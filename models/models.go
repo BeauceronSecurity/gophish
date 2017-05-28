@@ -8,8 +8,6 @@ import (
 	"log"
 	"os"
 
-	"bitbucket.org/liamstask/goose/lib/goose"
-
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/BeauceronSecurity/gophish/config"
 	"github.com/jinzhu/gorm"
@@ -62,42 +60,9 @@ func generateSecureKey() string {
 	return fmt.Sprintf("%x", k)
 }
 
-func chooseDBDriver(name, openStr string) goose.DBDriver {
-	d := goose.DBDriver{Name: name, OpenStr: openStr}
-
-	switch name {
-	case "mysql":
-		d.Import = "github.com/go-sql-driver/mysql"
-		d.Dialect = &goose.MySqlDialect{}
-
-	// Default database is sqlite3
-	default:
-		d.Import = "github.com/mattn/go-sqlite3"
-		d.Dialect = &goose.Sqlite3Dialect{}
-	}
-
-	return d
-}
-
 // Setup initializes the Conn object
 // It also populates the Gophish Config object
 func Setup() error {
-	create_db := false
-	if _, err = os.Stat(config.Conf.DBPath); err != nil || config.Conf.DBPath == ":memory:" {
-		create_db = true
-	}
-	// Setup the goose configuration
-	migrateConf := &goose.DBConf{
-		MigrationsDir: config.Conf.MigrationsPath,
-		Env:           "production",
-		Driver:        chooseDBDriver(config.Conf.DBName, config.Conf.DBPath),
-	}
-	// Get the latest possible migration
-	latest, err := goose.GetMostRecentDBVersion(migrateConf.MigrationsDir)
-	if err != nil {
-		Logger.Println(err)
-		return err
-	}
 	// Open our database connection
 	db, err = gorm.Open(config.Conf.DBName, config.Conf.DBPath)
 	db.LogMode(false)
@@ -106,26 +71,6 @@ func Setup() error {
 	if err != nil {
 		Logger.Println(err)
 		return err
-	}
-	// Migrate up to the latest version
-	err = goose.RunMigrationsOnDb(migrateConf, migrateConf.MigrationsDir, latest, db.DB())
-	if err != nil {
-		Logger.Println(err)
-		return err
-	}
-	//If the database didn't exist, we need to create the admin user
-	if create_db {
-		//Create the default user
-		initUser := User{
-			Username: "admin",
-			Hash:     "$2a$10$IYkPp0.QsM81lYYPrQx6W.U6oQGw7wMpozrKhKAHUBVL4mkm/EvAS", //gophish
-		}
-		initUser.ApiKey = generateSecureKey()
-		err = db.Save(&initUser).Error
-		if err != nil {
-			Logger.Println(err)
-			return err
-		}
 	}
 	return nil
 }
