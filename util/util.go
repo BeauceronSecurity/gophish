@@ -19,7 +19,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/gophish/gophish/models"
+	"github.com/BeauceronSecurity/gophish/models"
 	"github.com/jordan-wright/email"
 )
 

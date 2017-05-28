@@ -34,11 +34,11 @@ import (
 	"sync"
 
 	"github.com/NYTimes/gziphandler"
-	"github.com/gophish/gophish/auth"
-	"github.com/gophish/gophish/config"
-	"github.com/gophish/gophish/controllers"
-	"github.com/gophish/gophish/models"
-	"github.com/gophish/gophish/util"
+	"github.com/BeauceronSecurity/gophish/auth"
+	"github.com/BeauceronSecurity/gophish/config"
+	"github.com/BeauceronSecurity/gophish/controllers"
+	"github.com/BeauceronSecurity/gophish/models"
+	"github.com/BeauceronSecurity/gophish/util"
 	"github.com/gorilla/handlers"
 )
 
