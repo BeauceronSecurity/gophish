@@ -12,6 +12,7 @@ import (
 	"github.com/BeauceronSecurity/gophish/config"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3" // Blank import needed to import sqlite3
+	_ "github.com/jinzhu/gorm/dialects/mssql"
 )
 
 var db *gorm.DB
