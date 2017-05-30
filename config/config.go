@@ -39,7 +39,7 @@ var Version = "0.3"
 
 func init() {
 	// Get the config file
-	config_file, err := ioutil.ReadFile("./config.json")
+	config_file, err := ioutil.ReadFile("/run/secrets/config.json")
 	if err != nil {
 		fmt.Printf("File error: %v\n", err)
 	}
