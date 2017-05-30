@@ -1,0 +1,1 @@
+docker run --rm -v ${PWD}:/go/src/gophish -w /go/src/gophish --entrypoint /bin/bash golang -c "go-wrapper download;go-wrapper install;go build -v"
